@@ -19,6 +19,7 @@ class Plotter:
         self.canvas.grid(row=0, column=0, padx=10, pady=10)
         self.csv_dict = csv_dict
         self.dates_numeric = {}
+        self.colors = ["blue", "red", "green", "yellow", "orange", "purple"]
 
         # Detect the date column and convert dates to numeric
         for key, values in csv_dict.items():
@@ -75,17 +76,22 @@ class Plotter:
             y_max = max(y_max, max(y_values))
 
         # Draw data points for each Y value
-        for y_key in y_keys:
+        for i, y_key in enumerate(y_keys):
             y_values = self.csv_dict[y_key]
             data_points = zip(x_values, y_values)
             canvas_points = [self._data_to_canvas(x, y, x_min, x_max, y_min, y_max) for x, y in data_points]
 
+            color = self.colors[i % len(self.colors)]  # Cycle through colors
+
             for point in canvas_points:
-                self.canvas.create_oval(point[0] - 3, point[1] - 3, point[0] + 3, point[1] + 3, fill="blue")
+                self.canvas.create_oval(point[0] - 3, point[1] - 3, point[0] + 3, point[1] + 3, fill=color)
 
             # Draw lines connecting the points
-            for i in range(len(canvas_points) - 1):
-                self.canvas.create_line(canvas_points[i], canvas_points[i + 1], fill="blue", width=2)
+            for j in range(len(canvas_points) - 1):
+                self.canvas.create_line(canvas_points[j], canvas_points[j + 1], fill=color, width=2)
+
+            # Add a legend entry
+            self.canvas.create_text(self.canvas_width - self.margin + 10, self.margin + i * 20, text=y_key, fill=color)
 
     def draw_axis(self):
         """Draw X and Y axes with arrows."""
@@ -108,9 +114,6 @@ class Plotter:
 
     def add_labels(self):
         """Add labels for X and Y axes."""
-
-    def add_legend(self):
-        """Add a legend for the plotted data."""
 
 
 def main():
