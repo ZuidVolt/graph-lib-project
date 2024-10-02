@@ -54,9 +54,16 @@ class Plotter:
 
         return scaled_x, scaled_y
 
-    def draw_data_points(self):
-        # Get the first key from the dictionary as the X values
-        x_key = next(iter(self.csv_dict.keys()))
+    def draw_data_points(self, x_axis_key=None):
+        # Get the X values
+        if x_axis_key is None:
+            # Get the first key from the dictionary as the X values
+            x_key = next(iter(self.csv_dict.keys()))  # Assuming the first column is the X-axis
+        elif x_axis_key in self.csv_dict:
+            x_key = x_axis_key
+        else:
+            raise ValueError(f"Invalid x_axis_key: {x_axis_key}. Key not found in csv_dict.")
+
         x_values = self.csv_dict[x_key]  # X-values
 
         # Get all other keys as Y values
@@ -83,6 +90,7 @@ class Plotter:
 
             color = self.colors[i % len(self.colors)]  # Cycle through colors
 
+            # Draw data points
             for point in canvas_points:
                 self.canvas.create_oval(point[0] - 3, point[1] - 3, point[0] + 3, point[1] + 3, fill=color)
 
@@ -137,7 +145,6 @@ def main():
     plotter.tick_marks()
     plotter.draw_data_points()
     plotter.add_labels()
-    plotter.add_legend()
 
     root.mainloop()
 
