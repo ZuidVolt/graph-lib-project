@@ -36,6 +36,7 @@ def is_whole_number(value: str) -> bool:
     value = value.strip()
     return value.replace("-", "", 1).isdigit()
 
+
 # function time complexity of O(n*m) and with constant it is O(2*n*m)
 def data_list_to_dict(headers_list: List[str], data_list: List[List[str]]) -> Dict[str, List[Any]]:
     csv_dict: Dict[str, List[Any]] = {header: [] for header in headers_list}
