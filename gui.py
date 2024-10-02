@@ -46,23 +46,38 @@ class Plotter:
         return scaled_x, scaled_y
 
     def draw_data_points(self):
-        # Get the first date key from the converted numeric dates
-        date_key = next(iter(self.dates_numeric.keys()))
-        x_values = self.dates_numeric[date_key]  # Numeric X-values for dates
-        y_values = self.csv_dict["Value"]  # Y-values
+        # Get the first key from the dictionary as the X values
+        x_key = next(iter(self.csv_dict.keys()))
+        x_values = self.csv_dict[x_key]  # X-values
 
+        # Get all other keys as Y values
+        y_keys = list(self.csv_dict.keys())
+        y_keys.remove(x_key)
+
+        # Convert X values to numeric if they are dates
+        if x_key in self.dates_numeric:
+            x_values = self.dates_numeric[x_key]
+
+        # Find min and max values for X and Y
         x_min, x_max = min(x_values), max(x_values)
-        y_min, y_max = min(y_values), max(y_values)
+        y_min, y_max = float("inf"), float("-inf")
+        for y_key in y_keys:
+            y_values = self.csv_dict[y_key]
+            y_min = min(y_min, min(y_values))
+            y_max = max(y_max, max(y_values))
 
-        data_points = zip(x_values, y_values)
-        canvas_points = [self._data_to_canvas(x, y, x_min, x_max, y_min, y_max) for x, y in data_points]
+        # Draw data points for each Y value
+        for y_key in y_keys:
+            y_values = self.csv_dict[y_key]
+            data_points = zip(x_values, y_values)
+            canvas_points = [self._data_to_canvas(x, y, x_min, x_max, y_min, y_max) for x, y in data_points]
 
-        for point in canvas_points:
-            self.canvas.create_oval(point[0] - 3, point[1] - 3, point[0] + 3, point[1] + 3, fill="blue")
+            for point in canvas_points:
+                self.canvas.create_oval(point[0] - 3, point[1] - 3, point[0] + 3, point[1] + 3, fill="blue")
 
-        # Draw lines connecting the points
-        for i in range(len(canvas_points) - 1):
-            self.canvas.create_line(canvas_points[i], canvas_points[i + 1], fill="blue", width=2)
+            # Draw lines connecting the points
+            for i in range(len(canvas_points) - 1):
+                self.canvas.create_line(canvas_points[i], canvas_points[i + 1], fill="blue", width=2)
 
     def draw_axis(self):
         """Draw X and Y axes with arrows."""
