@@ -2,6 +2,9 @@
 import tkinter as tk
 from typing import Dict, Any, List
 import datetime
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 class Plotter:
@@ -15,28 +18,44 @@ class Plotter:
         self.canvas = tk.Canvas(root, width=canvas_width, height=canvas_height, bg="white")
         self.canvas.grid(row=0, column=0, padx=10, pady=10)
         self.csv_dict = csv_dict
-        self.dates_numeric = self.convert_dates_to_numeric(csv_dict["Date"])  # Convert dates to numeric values
+        self.dates_numeric = {}
 
-    def convert_dates_to_numeric(self, dates: List[str]) -> List[int]:
+        # Detect the date column and convert dates to numeric
+        for key, values in csv_dict.items():
+            if isinstance(values[0], str) and self._is_date(values):  # Ensure values are strings before checking
+                self.dates_numeric[key] = self._convert_dates_to_numeric(values)
+
+    def _is_date(self, values: List[str]) -> bool:
+        """Check if a list of strings are date values."""
+        try:
+            for value in values:
+                datetime.datetime.strptime(value, "%Y-%m-%d")
+            return True
+        except ValueError:
+            return False
+
+    def _convert_dates_to_numeric(self, dates: List[str]) -> List[int]:
         """Convert date strings into the number of days since the first date."""
         base_date = datetime.datetime.strptime(dates[0], "%Y-%m-%d")
         return [(datetime.datetime.strptime(date, "%Y-%m-%d") - base_date).days for date in dates]
 
-    def data_to_canvas(self, data_x, data_y, x_min, x_max, y_min, y_max):
+    def _data_to_canvas(self, data_x, data_y, x_min, x_max, y_min, y_max):
         """Scale x and y values based on the plot dimensions."""
         scaled_x = ((data_x - x_min) / (x_max - x_min)) * self.plot_width + self.margin
         scaled_y = self.plot_height - ((data_y - y_min) / (y_max - y_min)) * self.plot_height + self.margin
         return scaled_x, scaled_y
 
     def draw_data_points(self):
-        x_values = self.dates_numeric  # Numeric X-values for dates
+        # Get the first date key from the converted numeric dates
+        date_key = next(iter(self.dates_numeric.keys()))
+        x_values = self.dates_numeric[date_key]  # Numeric X-values for dates
         y_values = self.csv_dict["Value"]  # Y-values
 
         x_min, x_max = min(x_values), max(x_values)
         y_min, y_max = min(y_values), max(y_values)
 
         data_points = zip(x_values, y_values)
-        canvas_points = [self.data_to_canvas(x, y, x_min, x_max, y_min, y_max) for x, y in data_points]
+        canvas_points = [self._data_to_canvas(x, y, x_min, x_max, y_min, y_max) for x, y in data_points]
 
         for point in canvas_points:
             self.canvas.create_oval(point[0] - 3, point[1] - 3, point[0] + 3, point[1] + 3, fill="blue")
@@ -61,20 +80,14 @@ class Plotter:
             self.margin, self.canvas_height - self.margin, self.margin, self.margin, arrow=tk.LAST, fill="black"
         )
 
+    def tick_marks(self):
+        """Add tick marks on the X and Y axes."""
+
     def add_labels(self):
         """Add labels for X and Y axes."""
-        # X-axis label (dates)
-        self.canvas.create_text(
-            self.canvas_width - self.margin, self.canvas_height - self.margin + 20, text="Date", anchor=tk.CENTER
-        )
-        # Y-axis label (rotated)
-        self.canvas.create_text(self.margin - 30, self.margin, text="Value", anchor=tk.CENTER, angle=90)
 
     def add_legend(self):
         """Add a legend for the plotted data."""
-        self.canvas.create_rectangle(self.canvas_width - 100, 10, self.canvas_width - 10, 50, outline="black")
-        self.canvas.create_line(self.canvas_width - 90, 20, self.canvas_width - 30, 20, fill="blue", width=2)
-        self.canvas.create_text(self.canvas_width - 60, 35, text="Data", anchor=tk.CENTER)
 
 
 def main():
@@ -87,7 +100,7 @@ def main():
     margin = 50
 
     # Example CSV data (Dictionary format)
-    csv_dict = {
+    csv_dict: Dict[str, list[Any]] = {
         "Date": ["2022-01-01", "2022-01-02", "2022-01-03", "2022-01-04", "2022-01-05"],
         "Value": [10, 15, 20, 25, 30],
     }
@@ -95,6 +108,7 @@ def main():
     plotter = Plotter(root, canvas_width, canvas_height, margin, csv_dict)
 
     plotter.draw_axis()
+    plotter.tick_marks()
     plotter.draw_data_points()
     plotter.add_labels()
     plotter.add_legend()
