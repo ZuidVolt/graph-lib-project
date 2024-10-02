@@ -11,7 +11,8 @@ canvas_width = 400
 canvas_height = 300
 
 # Create a Canvas widget and add it to the window
-canvas = tk.Canvas(root, width=canvas_width, height=canvas_height)
+canvas = tk.Canvas(root, width=canvas_width, height=canvas_height, bg="white")
+
 
 # Place the canvas in the window using grid layout management (optional but recommended)
 canvas.grid(row=0, column=0, padx=10, pady=10)
