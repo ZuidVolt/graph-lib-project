@@ -28,10 +28,16 @@ def read_headers_from_csv_file() -> list:
 
 
 def is_numeric(value: str) -> bool:
+    value = value.strip()
     return value.replace(".", "", 1).replace("-", "", 1).isdigit()
 
 
-def data_list_to_dict(headers_list: list, data_list: list) -> Dict:
+def is_whole_number(value: str) -> bool:
+    value = value.strip()
+    return value.replace("-", "", 1).isdigit()
+
+
+def data_list_to_dict(headers_list: List[str], data_list: List[List[str]]) -> Dict[str, List[Any]]:
     csv_dict: Dict[str, List[Any]] = {header: [] for header in headers_list}
 
     for row in data_list:
@@ -40,7 +46,10 @@ def data_list_to_dict(headers_list: list, data_list: list) -> Dict:
 
     for header, values in csv_dict.items():
         if all(is_numeric(value) for value in values):
-            csv_dict[header] = [float(value) for value in values]
+            if all(is_whole_number(value) for value in values):
+                csv_dict[header] = [int(value) for value in values]
+            else:
+                csv_dict[header] = [float(value) for value in values]
         # # Check for non-numeric values in the column and print a warning message
         # else:
         #     non_numeric_values = [value for value in values if not is_numeric(value)]
