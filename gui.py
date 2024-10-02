@@ -59,7 +59,7 @@ class Plotter:
             raise ValueError(f"Invalid x_axis_key: {x_axis_key}. Key not found in csv_dict.")
 
         x_values = self.dates_numeric.get(x_key, self.csv_dict[x_key])
-        y_keys = [k for k in self.csv_dict.keys() if k != x_key]
+        y_keys = [k for k in self.csv_dict if k != x_key]
 
         x_min, x_max = min(x_values), max(x_values)
         y_min, y_max = float("inf"), float("-inf")
@@ -144,7 +144,7 @@ def main():
     margin = 60
 
     # Example data
-    csv_dict = {
+    csv_dict: Dict[str, List[Any]] = {
         "Date": ["2022-01-01", "2022-01-02", "2022-01-03", "2022-01-04", "2022-01-05"],
         "Temperature": [10, 15, 20, 25, 30],
         "Humidity": [50, 45, 40, 35, 30],
