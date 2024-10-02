@@ -76,10 +76,13 @@ def main() -> None:
     data_list = read_data_from_csv_file()
     csv_dict = data_list_to_dict(headers_list, data_list)
     # print the csv dict and the data row list to compare the results
-    print_csv_dict(csv_dict)
+
+    print("\nData Rows from CSV file:")
     print_data_rows(data_list)
+    print("\nCSV Dictionary:")
+    print_csv_dict(csv_dict)
+    print()
 
 
 if __name__ == "__main__":
-    print()
     main()
