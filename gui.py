@@ -15,14 +15,14 @@ class Plotter:
 
     def data_to_canvas(self, data_x, data_y):
         # Scale x and y values based on the plot dimensions
-        scaled_x = (data_x / 100) * self.plot_width + self.margin
-        scaled_y = self.plot_height - ((data_y / 100) * self.plot_height) + self.margin
+        scaled_x = (data_x / 100) * self.plot_width + self.margin # Assuming x values are between 0 and 100
+        scaled_y = self.plot_height - ((data_y / 100) * self.plot_height) + self.margin # Assuming y values are between 0 and 100
         return scaled_x, scaled_y
 
     def draw_data_points(self, data_points: list):
         canvas_points = [self.data_to_canvas(x, y) for x, y in data_points]
         for point in canvas_points:
-            self.canvas.create_oval(point[0] - 3, point[1] - 3, point[0] + 3, point[1] + 3, fill="blue")
+            self.canvas.create_oval(point[0] - 3, point[1] - 3, point[0] + 3, point[1] + 3, fill="blue") # Draw a small circle at each point
 
     def draw_axis(self):
         # Drawing the X-axis (from left margin to right margin)
