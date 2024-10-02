@@ -41,8 +41,16 @@ class Plotter:
 
     def _data_to_canvas(self, data_x, data_y, x_min, x_max, y_min, y_max):
         """Scale x and y values based on the plot dimensions."""
-        scaled_x = ((data_x - x_min) / (x_max - x_min)) * self.plot_width + self.margin
-        scaled_y = self.plot_height - ((data_y - y_min) / (y_max - y_min)) * self.plot_height + self.margin
+        if x_max - x_min == 0:
+            scaled_x = self.margin + self.plot_width / 2
+        else:
+            scaled_x = ((data_x - x_min) / (x_max - x_min)) * self.plot_width + self.margin
+
+        if y_max - y_min == 0:
+            scaled_y = self.margin + self.plot_height / 2
+        else:
+            scaled_y = self.plot_height - ((data_y - y_min) / (y_max - y_min)) * self.plot_height + self.margin
+
         return scaled_x, scaled_y
 
     def draw_data_points(self):
