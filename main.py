@@ -2,11 +2,14 @@
 from csv_parsing import read_headers_from_csv_file, read_data_from_csv_file, data_list_to_dict
 from gui import Plotter
 import tkinter as tk
+from pathlib import Path
 
 
 def main() -> None:
-    headers_list = read_headers_from_csv_file()
-    data_list = read_data_from_csv_file()
+    data_file_path = Path("data.csv")
+
+    headers_list = read_headers_from_csv_file(data_file_path)
+    data_list = read_data_from_csv_file(data_file_path)
     csv_dict = data_list_to_dict(headers_list, data_list)
 
     root = tk.Tk()

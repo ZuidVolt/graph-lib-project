@@ -6,24 +6,24 @@ from typing import Dict, Any, List
 DATA_FILE_PATH = Path("data.csv")
 
 
-def read_data_from_csv_file() -> list:
+def read_data_from_csv_file(data_file_path: Path) -> list:
     try:
-        with Path.open(DATA_FILE_PATH, newline="") as data_file:
+        with Path.open(data_file_path, newline="") as data_file:
             data_reader = csv.reader(data_file)
             headers = next(data_reader)  # Remove the header row  # noqa: F841
             return list(data_reader)  # Return the remaining rows
     except FileNotFoundError:
-        print(f"Error: {DATA_FILE_PATH} not found.")
+        print(f"Error: {data_file_path} not found.")
         exit(1)
 
 
-def read_headers_from_csv_file() -> list:
+def read_headers_from_csv_file(data_file_path: Path) -> list:
     try:
-        with Path.open(DATA_FILE_PATH, newline="") as data_file:
+        with Path.open(data_file_path, newline="") as data_file:
             data_reader = csv.reader(data_file)
             return next(data_reader)  # Get the first row which contains the headers
     except FileNotFoundError:
-        print(f"Error: {DATA_FILE_PATH} not found.")
+        print(f"Error: {data_file_path} not found.")
         exit(1)
 
 
@@ -72,8 +72,8 @@ def print_data_rows(data_list) -> None:
 
 
 def main() -> None:
-    headers_list = read_headers_from_csv_file()
-    data_list = read_data_from_csv_file()
+    headers_list = read_headers_from_csv_file(DATA_FILE_PATH)
+    data_list = read_data_from_csv_file(DATA_FILE_PATH)
     csv_dict = data_list_to_dict(headers_list, data_list)
     # print the csv dict and the data row list to compare the results
 
