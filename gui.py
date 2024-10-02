@@ -1,3 +1,4 @@
+# gui.py
 import tkinter as tk
 
 # Create the main window
