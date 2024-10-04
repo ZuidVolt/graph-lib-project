@@ -96,7 +96,10 @@ class Plotter:
 
         self._draw_axis_labels(x_key, x_min, x_max, y_min, y_max)
 
+        ## To be implemented
         # self._draw_tick_marks(x_key, x_min, x_max, y_min, y_max)
+
+        # self._draw_title_label()
 
     def _draw_axis_labels(self, x_key, x_min, x_max, y_min, y_max):  # TODO: fix the date labels
         # X-axis labels
@@ -123,6 +126,9 @@ class Plotter:
 
     def _draw_tick_marks(self):  # TODO: Implement the tick marks
         """displays Dynamic tick marks for the X and Y axis"""
+
+    def _draw_title_label(self):  # TODO: Implement the title labels
+        """displays Dynamic title labels for the X and Y axis"""
 
     def draw_axis(self):
         # X-axis
