@@ -101,7 +101,7 @@ class Plotter:
 
         # self._draw_title_label()
 
-    def _draw_axis_labels(self, x_key, x_min, x_max, y_min, y_max):  # TODO: fix the date labels
+    def _draw_axis_labels(self, x_key, x_min, x_max, y_min, y_max):  # TODO: fix the label display
         # X-axis labels
         for i in range(6):
             x = x_min + (x_max - x_min) * i / 5
