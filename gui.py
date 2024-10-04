@@ -96,7 +96,7 @@ class Plotter:
 
         self._draw_axis_labels(x_key, x_min, x_max, y_min, y_max)
 
-    def _draw_axis_labels(self, x_key, x_min, x_max, y_min, y_max):
+    def _draw_axis_labels(self, x_key, x_min, x_max, y_min, y_max):  # TODO: fix the date labels
         # X-axis labels
         for i in range(6):
             x = x_min + (x_max - x_min) * i / 5
@@ -118,6 +118,9 @@ class Plotter:
             canvas_x, canvas_y = self._data_to_canvas(x_min, y, x_min, x_max, y_min, y_max)
             self.canvas.create_text(canvas_x - 25, canvas_y, text=f"{y:.1f}")
             self.canvas.create_line(canvas_x - 5, canvas_y, canvas_x, canvas_y)
+
+    def _draw_tick_marks(self):  # TODO: Implement the tick marks
+        """displays Dynamic tick marks for the X and Y axis"""
 
     def draw_axis(self):
         # X-axis
