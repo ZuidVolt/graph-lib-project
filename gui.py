@@ -96,6 +96,8 @@ class Plotter:
 
         self._draw_axis_labels(x_key, x_min, x_max, y_min, y_max)
 
+        # self._draw_tick_marks(x_key, x_min, x_max, y_min, y_max)
+
     def _draw_axis_labels(self, x_key, x_min, x_max, y_min, y_max):  # TODO: fix the date labels
         # X-axis labels
         for i in range(6):
@@ -147,7 +149,7 @@ def main():
     margin = 60
 
     # Example data
-    csv_dict: Dict[str, List[Any]] = {
+    csv_dict: Dict[str, List[Any]] = {  # add more data types later
         "Date": ["2022-01-01", "2022-01-02", "2022-01-03", "2022-01-04", "2022-01-05"],
         "Temperature": [10, 15, 20, 25, 30],
         "Humidity": [50, 45, 40, 35, 30],
